@@ -16,7 +16,7 @@ st.set_page_config(
 # Header
 st.markdown("""
 # 📄 AI Resume Analyzer
-Analyze your resume with AI feedback and store it securely.
+Analyze your resume with AI feedback, get interactive suggestions, and store it securely.
 """)
 
 # Upload Section
@@ -35,9 +35,40 @@ with st.expander("Upload Your Resume"):
             if st.button("Analyze & Save Resume"):
                 with st.spinner("Analyzing with AI..."):
                     feedback = get_feedback(resume_text)
-                
+
                 st.subheader("🔎 AI Feedback")
                 st.markdown(feedback)
+
+                # --- Interactive Coaching Mode ---
+                st.subheader("🤝 Interactive Coaching")
+                missing_keywords = ["Cloud Computing", "NLP", "AWS"]  # Example; replace with real extraction
+                for kw in missing_keywords:
+                    st.markdown(f"**Missing:** {kw}")
+                    suggestion = f"Add a bullet point including '{kw}'"
+                    st.markdown(f"**Suggestion:** {suggestion}")
+                
+                if st.button("Fix My Resume"):
+                    # In reality, call an LLM API to generate improved lines
+                    improved_resume = resume_text + "\n• Optimized ML workflows by deploying models on cloud platforms (AWS/GCP)."
+                    st.text_area("Improved Resume Preview", improved_resume, height=250)
+
+                # --- Gamified ATS Score ---
+                st.subheader("🎮 Resume Score Progression")
+                score_before = 70
+                score_after = 85
+                st.progress(score_before)
+                st.markdown(f"Your current score: **{score_before}%**")
+                st.markdown(f"Suggested improvements can boost your score to: **{score_after}%** 🎉")
+
+                # --- Career Roadmap Suggestions ---
+                st.subheader("🚀 Career Roadmap")
+                roadmap = [
+                    "Since NLP is missing, consider the Coursera NLP Specialization.",
+                    "Learn Cloud Computing (AWS/GCP) to improve cloud-related keywords.",
+                    "Take an advanced Python or ML project to strengthen technical skills."
+                ]
+                for suggestion in roadmap:
+                    st.markdown(f"- {suggestion}")
 
                 if name.strip():
                     save_resume(name, resume_text, feedback)
@@ -48,7 +79,6 @@ with st.expander("Upload Your Resume"):
 
 # Display stored resumes in a two-column layout
 st.subheader("📂 Stored Resumes")
-
 resumes = fetch_resumes()
 
 if resumes:
