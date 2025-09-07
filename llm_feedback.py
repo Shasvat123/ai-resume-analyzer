@@ -1,12 +1,7 @@
-# llm_feedback.py
-import os
-import openai
 import requests
 from utils import format_prompt
 
-# Load API key safely from environment variable
-openai.api_key = os.getenv("OPENAI_API_KEY")  # <-- safe, do NOT hardcode
-
+# API_KEY = "gsk_SKlVA8PNEJJtptaymq9pWGdyb3FYsMrvaPp7Oy0B2rU8ZcfD463"   # <-- replace again carefully
 API_URL = "https://api.groq.com/openai/v1/chat/completions"
 
 def get_feedback(resume_text: str, job_role: str = "", job_desc: str = "") -> str:
@@ -33,7 +28,7 @@ Give:
         response = requests.post(
             API_URL,
             headers={
-                "Authorization": f"Bearer {openai.api_key}",  # use env variable
+                "Authorization": f"Bearer {API_KEY}",
                 "Content-Type": "application/json"
             },
             json={
