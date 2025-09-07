@@ -16,13 +16,15 @@ st.set_page_config(
 # Header
 st.markdown("""
 # 📄 AI Resume Analyzer
-Analyze your resume with AI feedback, get interactive suggestions, and store it securely.
+Analyze your resume with AI feedback, compare with job role, and store it securely.
 """)
 
 # Upload Section
 with st.expander("Upload Your Resume"):
     uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
     name = st.text_input("Enter your name:")
+    job_role = st.text_input("Enter the Job Role you are targeting:")
+    job_desc = st.text_area("Paste the Job Description (optional):", height=100)
 
     if uploaded_file is not None:
         try:
@@ -34,23 +36,20 @@ with st.expander("Upload Your Resume"):
 
             if st.button("Analyze & Save Resume"):
                 with st.spinner("Analyzing with AI..."):
-                    feedback = get_feedback(resume_text)
+                    # Get feedback considering Job Role & Description
+                    feedback = get_feedback(resume_text, job_role, job_desc)
 
                 st.subheader("🔎 AI Feedback")
                 st.markdown(feedback)
 
                 # --- Interactive Coaching Mode ---
                 st.subheader("🤝 Interactive Coaching")
-                missing_keywords = ["Cloud Computing", "NLP", "AWS"]  # Example; replace with real extraction
+                # Example missing keywords (replace with dynamic extraction later)
+                missing_keywords = ["Cloud Computing", "NLP", "AWS"]  
                 for kw in missing_keywords:
                     st.markdown(f"**Missing:** {kw}")
                     suggestion = f"Add a bullet point including '{kw}'"
                     st.markdown(f"**Suggestion:** {suggestion}")
-                
-                if st.button("Fix My Resume"):
-                    # In reality, call an LLM API to generate improved lines
-                    improved_resume = resume_text + "\n• Optimized ML workflows by deploying models on cloud platforms (AWS/GCP)."
-                    st.text_area("Improved Resume Preview", improved_resume, height=250)
 
                 # --- Gamified ATS Score ---
                 st.subheader("🎮 Resume Score Progression")
@@ -70,6 +69,7 @@ with st.expander("Upload Your Resume"):
                 for suggestion in roadmap:
                     st.markdown(f"- {suggestion}")
 
+                # Save resume and feedback in DB
                 if name.strip():
                     save_resume(name, resume_text, feedback)
                     st.success("✅ Resume and feedback saved!")
@@ -77,10 +77,9 @@ with st.expander("Upload Your Resume"):
         except Exception as e:
             st.error(f"Error processing file: {str(e)}")
 
-# Display stored resumes in a two-column layout
+# Display stored resumes
 st.subheader("📂 Stored Resumes")
 resumes = fetch_resumes()
-
 if resumes:
     for rid, name, feedback in resumes:
         with st.expander(f"🗂 {name} (ID: {rid})"):
