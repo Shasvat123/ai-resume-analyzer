@@ -1,5 +1,8 @@
 📄 AI Resume Analyzer
 
+DEPLOYED LINK - https://ai-resume-analyzer-l7hbncvfocjpzftakjudcg.streamlit.app/
+
+
 AI Resume Analyzer is a Streamlit web app that analyzes your resume, provides AI-powered feedback, gives interactive coaching, and suggests ways to improve your resume based on a specific job role or description. Users can also store their resumes and feedback securely in a local database.
 
 Features
